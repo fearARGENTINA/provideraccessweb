@@ -1,0 +1,63 @@
+###################### Filebeat Configuration Example #########################
+
+# This file is an example configuration file highlighting only the most common
+# options. The filebeat.reference.yml file from the same directory contains all the
+# supported options with more comments. You can use it as a reference.
+#
+# You can find the full configuration reference here:
+# https://www.elastic.co/guide/en/beats/filebeat/index.html
+
+# For more available modules and options, please see the filebeat.reference.yml sample
+# configuration file.
+
+# ============================== Filebeat inputs ===============================
+
+filebeat.inputs:
+
+- type: tcp
+  enabled: true
+  host: "0.0.0.0:9000"
+  fields_under_root: true
+
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - decode_json_fields:
+      fields: ["message"]
+      process_array: true
+      max_depth: 2
+      target: ""
+      overwrite_keys: true
+      add_error_key: true
+
+# ============================== Filebeat modules ==============================
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+# ======================= Elasticsearch template setting =======================
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+setup.template.name: "filebeat-external-access-7.16.1"
+setup.template.pattern: "filebeat-external-access-7.16.1-*"
+
+# ---------------------------- Elasticsearch Output ----------------------------
+output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["${ES_HOSTS}"]
+
+  # Protocol - either `http` (default) or `https`.
+  protocol: "https"
+  ssl.verification_mode: none
+  # Authentication credentials - either API key or username/password.
+  #api_key: "id:api_key"
+  username: "${ES_USER}"
+  password: "${ES_PASSWORD}"
+  index: "filebeat-external-access-7.16.1"
+output.console:
+  pretty: true
+
+setup.ilm.enabled: false

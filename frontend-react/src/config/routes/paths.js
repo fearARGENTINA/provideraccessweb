@@ -1,0 +1,8 @@
+export const HOME = "/"
+export const LOGIN = "/login"
+export const APPS = "/apps"
+export const VALIDATE_ACCESS = "/validateAccess"
+export const MANAGE_ACCESS = "/manageAccess"
+export const CREATE_ACCESS = "/createAccess"
+export const MANAGE_BUSINESS_TYPES = "/manageBusinessTypes"
+export const VIEW_ALL_ACCESS = "/viewAllAccess"

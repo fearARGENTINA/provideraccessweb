@@ -1,0 +1,5 @@
+docker-compose.yml
+**/logs/*
+**/__pycache__
+**/build/*
+**/node_modules/*
